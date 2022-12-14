@@ -1,4 +1,5 @@
 module econia_wrappers::wrappers {
+    use aptos_std::coin;
     use econia::market;
     use econia::user::{
         deposit_from_coinstore,
@@ -31,6 +32,7 @@ module econia_wrappers::wrappers {
         price: u64,
         restriction: u8,
     ) {
+        let user_addr = address_of(user);
         // Create MarketAccount if not exists
         // Least significant 64 bits is 0 because we use NO_CUSTODIAN
         let user_market_account_id = get_market_account_id(
@@ -38,7 +40,7 @@ module econia_wrappers::wrappers {
             NO_CUSTODIAN,
         );
         if (!has_market_account_by_market_account_id(
-            address_of(user),
+            user_addr,
             user_market_account_id
         )) {
             register_market_account<BaseType, QuoteType>(
@@ -56,6 +58,10 @@ module econia_wrappers::wrappers {
                 NO_CUSTODIAN,
                 deposit_amount // size * price * tick_size
             );
+            // Register the BaseType if it is not registered
+            if (!coin::is_account_registered<BaseType>(user_addr)) {
+                coin::register<BaseType>(user);
+            };
         } else {
             deposit_from_coinstore<BaseType>(
                 user,
@@ -63,6 +69,10 @@ module econia_wrappers::wrappers {
                 NO_CUSTODIAN,
                 deposit_amount // size * lot_size
             );
+            // Register the QuoteType if it is not registered
+            if (!coin::is_account_registered<QuoteType>(user_addr)) {
+                coin::register<QuoteType>(user);
+            };
         };
 
         // Place the order
