@@ -4,7 +4,7 @@ version = '0.0.0' # Per SemVer
 upgrade_policy = 'compatible'
 
 [addresses]
-econia_wrappers = '0xeeee'
+econia_wrappers = '0x7c36a610d1cde8853a692c057e7bd2479ba9d5eeaeceafa24f125c23d2abf942'
 
 [dependencies.AptosFramework]
 git = 'https://github.com/aptos-labs/aptos-core'
