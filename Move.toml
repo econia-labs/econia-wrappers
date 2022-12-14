@@ -1,0 +1,17 @@
+[package]
+name = 'Econia Wrappers'
+version = '0.0.0' # Per SemVer
+upgrade_policy = 'compatible'
+
+[addresses]
+econia_wrappers = '0xeeee'
+
+[dependencies.AptosFramework]
+git = 'https://github.com/aptos-labs/aptos-core'
+subdir = 'aptos-move/framework/aptos-framework'
+rev = 'c4f5fb69fb848bf593f31b6adbca33b5a0e41cb0'
+
+[dependencies.Econia]
+git = 'https://github.com/econia-labs/econia'
+subdir = 'src/move/econia'
+rev = '96c7d6d08f0617e457253db6efebace409892605'
