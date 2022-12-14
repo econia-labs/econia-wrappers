@@ -13,24 +13,14 @@ module econia_wrappers::wrappers {
     const NO_CUSTODIAN: u64 = 0;
     const SHIFT_MARKET_ID: u8 = 64;
 
-    #[cmd]
-    /// Convenience script for `market::place_limit_order_user()`.
-    ///
-    /// This script will create a user MarketAccount if it does not already
-    /// exist and will withdraw from the user's CoinStore to ensure there is
-    /// sufficient balance to place the Order.
-    public entry fun place_limit_order_user_entry<
+    fun before_order_placement<
         BaseType,
         QuoteType
     >(
         user: &signer,
         deposit_amount: u64,
         market_id: u64,
-        integrator: address,
         side: bool,
-        size: u64,
-        price: u64,
-        restriction: u8,
     ) {
         let user_addr = address_of(user);
         // Create MarketAccount if not exists
@@ -74,7 +64,33 @@ module econia_wrappers::wrappers {
                 coin::register<QuoteType>(user);
             };
         };
+    }
 
+    #[cmd]
+    /// Convenience script for `market::place_limit_order_user()`.
+    ///
+    /// This script will create a user MarketAccount if it does not already
+    /// exist and will withdraw from the user's CoinStore to ensure there is
+    /// sufficient balance to place the Order.
+    public entry fun place_limit_order_user_entry<
+        BaseType,
+        QuoteType
+    >(
+        user: &signer,
+        deposit_amount: u64,
+        market_id: u64,
+        integrator: address,
+        side: bool,
+        size: u64,
+        price: u64,
+        restriction: u8,
+    ) {
+        before_order_placement<BaseType, QuoteType>(
+            user,
+            deposit_amount,
+            market_id,
+            side,
+        );
         // Place the order
         market::place_limit_order_user_entry<BaseType, QuoteType>(
             user,
