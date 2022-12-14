@@ -8,7 +8,7 @@ module econia_wrappers::wrappers {
     };
     use std::signer::{address_of};
 
-    const BUY: bool = true;
+    const BID: bool = false;
     const NO_CUSTODIAN: u64 = 0;
     const SHIFT_MARKET_ID: u8 = 64;
 
@@ -49,7 +49,7 @@ module econia_wrappers::wrappers {
         };
 
         // Deposit `deposit_amount` into the MarketAccount
-        if (side == BUY) {
+        if (side == BID) {
             deposit_from_coinstore<QuoteType>(
                 user,
                 market_id,
