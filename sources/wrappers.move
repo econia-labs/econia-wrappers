@@ -2,8 +2,9 @@ module econia_wrappers::wrappers {
     use econia::market;
     use econia::user::{
         deposit_from_coinstore,
+        get_market_account_id,
         has_market_account_by_market_account_id,
-        register_market_account
+        register_market_account,
     };
     use std::signer::{address_of};
 
@@ -32,7 +33,10 @@ module econia_wrappers::wrappers {
     ) {
         // Create MarketAccount if not exists
         // Least significant 64 bits is 0 because we use NO_CUSTODIAN
-        let user_market_account_id = ((market_id as u128) << SHIFT_MARKET_ID);
+        let user_market_account_id = get_market_account_id(
+            market_id,
+            NO_CUSTODIAN,
+        );
         if (!has_market_account_by_market_account_id(
             address_of(user),
             user_market_account_id
