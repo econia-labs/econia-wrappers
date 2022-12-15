@@ -10,6 +10,7 @@ module econia_wrappers::wrappers {
     use std::signer::{address_of};
 
     const BID: bool = false;
+    const BUY: bool = true;
     const NO_CUSTODIAN: u64 = 0;
     const SHIFT_MARKET_ID: u8 = 64;
 
@@ -100,6 +101,47 @@ module econia_wrappers::wrappers {
             size,
             price,
             restriction
+        );
+    }
+
+    #[cmd]
+    /// Convenience script for `market::place_market_order_user()`.
+    ///
+    /// This script will create a user MarketAccount if it does not already
+    /// exist and will withdraw from the user's CoinStore to ensure there is
+    /// sufficient balance to place the Order.
+    public entry fun place_market_order_user_entry<
+        BaseType,
+        QuoteType
+    >(
+        user: &signer,
+        deposit_amount: u64,
+        market_id: u64,
+        integrator: address,
+        direction: bool,
+        min_base: u64,
+        max_base: u64,
+        min_quote: u64,
+        max_quote: u64,
+        limit_price: u64,
+    ) {
+        before_order_placement<BaseType, QuoteType>(
+            user,
+            deposit_amount,
+            market_id,
+            !direction, // side = !direction
+        );
+        // Place the order
+        market::place_market_order_user<BaseType, QuoteType>(
+            user,
+            market_id,
+            integrator,
+            direction,
+            min_base,
+            max_base,
+            min_quote,
+            max_quote,
+            limit_price,
         );
     }
 }
