@@ -11,7 +11,7 @@ module econia_wrappers::wrappers {
     use std::signer::{address_of};
 
     const BID: bool = false;
-    const BUY: bool = true;
+    const BUY: bool = false;
     const NO_CUSTODIAN: u64 = 0;
     const SHIFT_MARKET_ID: u8 = 64;
 
