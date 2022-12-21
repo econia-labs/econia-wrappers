@@ -6,6 +6,7 @@ module econia_wrappers::wrappers {
         get_market_account_id,
         has_market_account_by_market_account_id,
         register_market_account,
+        withdraw_to_coinstore,
     };
     use std::signer::{address_of};
 
@@ -132,16 +133,32 @@ module econia_wrappers::wrappers {
             !direction, // side = !direction
         );
         // Place the order
-        market::place_market_order_user<BaseType, QuoteType>(
-            user,
-            market_id,
-            integrator,
-            direction,
-            min_base,
-            max_base,
-            min_quote,
-            max_quote,
-            limit_price,
-        );
+        let (base_traded, quote_traded, _) =
+            market::place_market_order_user<BaseType, QuoteType>(
+                user,
+                market_id,
+                integrator,
+                direction,
+                min_base,
+                max_base,
+                min_quote,
+                max_quote,
+                limit_price,
+            );
+        if (direction == BUY) {
+            // Return the unused quote
+            withdraw_to_coinstore<BaseType>(
+                user,
+                market_id,
+                base_traded,
+            );
+        } else {
+            // Return the unused base
+            withdraw_to_coinstore<QuoteType>(
+                user,
+                market_id,
+                quote_traded,
+            );
+        };
     }
 }
