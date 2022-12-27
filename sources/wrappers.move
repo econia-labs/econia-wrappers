@@ -12,6 +12,12 @@ module econia_wrappers::wrappers {
 
     const BID: bool = false;
     const BUY: bool = false;
+    /// Flag to cancel maker and taker order during a self match.
+    const CANCEL_BOTH: u8 = 1;
+    /// Flag to cancel maker order only during a self match.
+    const CANCEL_MAKER: u8 = 2;
+    /// Flag to cancel taker order only during a self match.
+    const CANCEL_TAKER: u8 = 3;
     const NO_CUSTODIAN: u64 = 0;
     const SHIFT_MARKET_ID: u8 = 64;
 
@@ -86,6 +92,7 @@ module econia_wrappers::wrappers {
         size: u64,
         price: u64,
         restriction: u8,
+        self_match_behaviour: u8,
     ) {
         before_order_placement<BaseType, QuoteType>(
             user,
@@ -101,7 +108,8 @@ module econia_wrappers::wrappers {
             side,
             size,
             price,
-            restriction
+            restriction,
+            self_match_behaviour,
         );
     }
 
@@ -125,6 +133,7 @@ module econia_wrappers::wrappers {
         min_quote: u64,
         max_quote: u64,
         limit_price: u64,
+        self_match_behaviour: u8,
     ) {
         before_order_placement<BaseType, QuoteType>(
             user,
@@ -144,6 +153,7 @@ module econia_wrappers::wrappers {
                 min_quote,
                 max_quote,
                 limit_price,
+                self_match_behaviour,
             );
         if (direction == BUY) {
             // Return the unused quote

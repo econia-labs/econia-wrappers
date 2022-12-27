@@ -4,7 +4,7 @@ version = '0.0.0' # Per SemVer
 upgrade_policy = 'compatible'
 
 [addresses]
-econia_wrappers = '0x7c36a610d1cde8853a692c057e7bd2479ba9d5eeaeceafa24f125c23d2abf942'
+econia_wrappers = '0x5ccea8ed10638110d0f5df241b5f68512ba09916a7567bbb939b4ff4fbca11ef'
 
 [dependencies.AptosFramework]
 git = 'https://github.com/aptos-labs/aptos-core'
@@ -14,4 +14,4 @@ rev = 'c4f5fb69fb848bf593f31b6adbca33b5a0e41cb0'
 [dependencies.Econia]
 git = 'https://github.com/econia-labs/econia'
 subdir = 'src/move/econia'
-rev = '96c7d6d08f0617e457253db6efebace409892605'
+rev = '26ba65e754dc42b4f341a08f29180dd58d4939dc'
