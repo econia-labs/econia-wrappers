@@ -139,7 +139,7 @@ module econia_wrappers::wrappers {
             user,
             deposit_amount,
             market_id,
-            !direction, // side = !direction
+            direction, // side == direction
         );
         // Place the order
         let (base_traded, quote_traded, _) =
